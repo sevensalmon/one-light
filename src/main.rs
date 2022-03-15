@@ -26,15 +26,20 @@ fn main() {
         speed: 8.0,
     });
 
-    #[cfg(feature = "release")]
+    #[cfg(not(feature = "debug"))]
     app.add_startup_system(setup_camera);
 
     app.add_startup_system(setup_character);
     app.add_startup_system(setup_environment);
     app.add_startup_system(setup_light);
 
+    app.add_system(player_movement);
+
     app.run();
 }
+
+#[derive(Component)]
+struct Player;
 
 fn setup_character(
     mut commands: Commands,
@@ -51,7 +56,8 @@ fn setup_character(
         }),
         transform: Transform::from_xyz(0.0, 1.0, 0.0),
         ..Default::default()
-    });
+    })
+    .insert(Player);
 }
 
 fn setup_environment(
@@ -94,4 +100,24 @@ fn setup_light(mut commands: Commands) {
         },
         ..Default::default()
     });
+}
+
+fn player_movement(
+    keyboard_input: Res<Input<KeyCode>>,
+    mut positions: Query<&mut Transform, With<Player>>,
+) {
+    for mut transform in positions.iter_mut() {
+        if keyboard_input.pressed(KeyCode::Left) {
+            transform.translation.x -= 0.5;
+        }
+        if keyboard_input.pressed(KeyCode::Right) {
+            transform.translation.x += 0.5;
+        }
+        if keyboard_input.pressed(KeyCode::Down) {
+            transform.translation.z -= 0.5;
+        }
+        if keyboard_input.pressed(KeyCode::Up) {
+            transform.translation.z += 0.5;
+        }
+    }
 }

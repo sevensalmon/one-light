@@ -5,7 +5,7 @@ edition = "2021"
 
 [features]
 default = []
-release = []
+main-camera = []
 debug = ["bevy-inspector-egui", "colored", "bevy_flycam"]
 
 [dependencies]
