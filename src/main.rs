@@ -115,10 +115,13 @@ fn setup_light(mut commands: Commands) {
 fn player_movement(
     keyboard_input: Res<Input<KeyCode>>,
     mut positions: Query<&mut Transform, With<Player>>,
+    // the player mesh
+    mut player_mesh: Query<&mut Mesh, With<Player>>,
 ) {
     for mut transform in positions.iter_mut() {
         if keyboard_input.pressed(KeyCode::Left) {
             transform.translation.x -= 0.5;
+            player_mesh.
         }
         if keyboard_input.pressed(KeyCode::Right) {
             transform.translation.x += 0.5;
